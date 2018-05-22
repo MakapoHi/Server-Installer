@@ -5,8 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Server_Installer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Server Installer" Height="273.936" Width="337.766"
+        ResizeMode="CanMinimize">
+    <!--<StackPanel x:Name="StackPanel_Box" Orientation="Vertical" Margin="0,0,114,106">
+        <RadioButton GroupName="AmxModX" Content="Amx Mod X 1.8.2" Checked="RadioButton_Checked"/>
+        <RadioButton GroupName="AmxModX" Content="Amx Mod X 1.8.3" Checked="RadioButton_Checked"/>
+        <RadioButton GroupName="AmxModX" Content="Не устанавливать" Checked="RadioButton_Checked" Margin="0,5,0,0"/>
+    </StackPanel>-->
     <Grid>
-        
+        <TabControl x:Name="MainTab">
+            <TabItem x:Name="AmxModX">
+                <TabItem.Header>
+                    <TextBlock>AmxModX</TextBlock>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <StackPanel x:Name="StackPanel_Box" Orientation="Vertical" Margin="0,0,165,160">
+                        <RadioButton GroupName="AmxModX" Content="Amx Mod X 1.8.2" Checked="RadioButton_Checked"/>
+                        <RadioButton GroupName="AmxModX" Content="Amx Mod X 1.8.3" Checked="RadioButton_Checked"/>
+                        <RadioButton GroupName="AmxModX" Content="Не устанавливать" Checked="RadioButton_Checked" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="MetaMod">
+                <TabItem.Header>
+                    <TextBlock>MetaMod</TextBlock>
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
+        <Button Content="Установить" Click="Button_Click" Margin="86,181,88,20"/>
     </Grid>
+
 </Window>
