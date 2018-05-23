@@ -19,9 +19,6 @@ using System.Diagnostics;
 
 namespace Server_Installer
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         enum VersionAmx { None, OneNineTwo, OneNineThree, OneNineThreeDev };
@@ -47,28 +44,34 @@ namespace Server_Installer
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string CurrentDir = Directory.GetCurrentDirectory();
-            string SteamCmdZipDir = String.Concat(CurrentDir, "\\steamcmd.zip");
-            string SteamCmdExeDir = String.Concat(CurrentDir, "\\steamcmd.exe");
+            string currentDir = Directory.GetCurrentDirectory();
+            string steamCmdDir = String.Concat(currentDir, "\\steamcmd");
 
-            if (!File.Exists(SteamCmdZipDir))
+            if (Directory.Exists(steamCmdDir))
+                Directory.Delete(steamCmdDir, true);
+            Directory.CreateDirectory(steamCmdDir);
+
+            string steamCmdZipDir = String.Concat(steamCmdDir, "\\steamcmd.zip");
+            string steamCmdExeDir = String.Concat(steamCmdDir, "\\steamcmd.exe");
+
+            if (!File.Exists(steamCmdZipDir))
             {
-                string SteamCmdUrl = "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip";
+                string steamCmdUrl = "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip";
 
                 WebClient webClient = new WebClient();
-                webClient.DownloadFile(SteamCmdUrl, "steamcmd.zip");
+                webClient.DownloadFile(steamCmdUrl, String.Concat(steamCmdDir, "\\steamcmd.zip"));
             }
-            if (!File.Exists(SteamCmdExeDir))
-                ZipFile.ExtractToDirectory(SteamCmdZipDir, CurrentDir);
+            if (!File.Exists(steamCmdExeDir))
+                ZipFile.ExtractToDirectory(steamCmdZipDir, steamCmdDir);
 
-            File.Delete(SteamCmdZipDir);
+            File.Delete(steamCmdZipDir);
 
-            Start_SteamCmd(SteamCmdExeDir, CurrentDir);
+            Start_SteamCmd(steamCmdExeDir, steamCmdDir);
         }
 
-        private void Start_SteamCmd(string SteamCmd_Dir = "", string currentDir = "")
+        private void Start_SteamCmd(string steamCmd_Dir = "", string steamCmdDir = "")
         {
-            string scriptDir = String.Concat(currentDir, "\\steamcmd_script.txt");
+            string scriptDir = String.Concat(steamCmdDir, "\\steamcmd_script.txt");
 
             StreamWriter streamWriter = new StreamWriter(scriptDir, false, Encoding.Default);
             streamWriter.Write("@ShutdownOnFailedCommand 0\n" +
@@ -88,7 +91,7 @@ namespace Server_Installer
                     break;
                 }
             }
-            Process.Start(SteamCmd_Dir, "+runscript steamcmd_script.txt");
+            Process.Start(steamCmd_Dir, "+runscript steamcmd_script.txt");
         }
     }
 }
