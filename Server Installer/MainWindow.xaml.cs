@@ -63,11 +63,23 @@ namespace Server_Installer
 
             File.Delete(SteamCmdZipDir);
 
-            Start_SteamCmd(SteamCmdExeDir);
+            Start_SteamCmd(SteamCmdExeDir, CurrentDir);
         }
 
-        private void Start_SteamCmd(string SteamCmd_Dir = "")
+        private void Start_SteamCmd(string SteamCmd_Dir = "", string currentDir = "")
         {
+            string scriptDir = String.Concat(currentDir, "\\steamcmd_script.txt");
+
+            StreamWriter streamWriter = new StreamWriter(scriptDir, false, Encoding.Default);
+            streamWriter.Write("@ShutdownOnFailedCommand 0\n" +
+                                "login anonymous\n" +
+                                "force_install_dir .\\server\\\n" +
+                                "app_update 10\n" +
+                                "app_update 70\n" +
+                                "app_update 90 -beta beta validate\n" +
+                                "quit");
+            streamWriter.Close();
+
             foreach (Process process in Process.GetProcesses())
             {
                 if (process.ProcessName.Equals("steamcmd"))
@@ -76,7 +88,7 @@ namespace Server_Installer
                     break;
                 }
             }
-            Process.Start(SteamCmd_Dir);
+            Process.Start(SteamCmd_Dir, "+runscript steamcmd_script.txt");
         }
     }
 }
